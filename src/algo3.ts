@@ -10,13 +10,13 @@ export function WriteGraph(data: string) {
     connections.push({from: 0, to: groupId})
     for(let i = 0; i < data.length; i++) {
         const symbol = data[i]
-        if(symbol == '^') {
+        if(symbol == '*') {
             group.push({key: ++portKey, text: buffer, color: "lightblue", group: groupId})
             group.push({key: --groupId, isGroup: true})
             connections.push({from: groupId+1, to: groupId})
             prevSymbol = symbol
             buffer = ""
-        } else if (symbol == 'v') {
+        } else if (symbol == '+') {
             group.push({key: ++portKey, text: buffer, color: "lightblue", group: groupId})
             prevSymbol = symbol
             buffer = ""

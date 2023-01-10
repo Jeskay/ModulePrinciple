@@ -18,7 +18,6 @@ onMounted(() => {
     const reader = new Reader(formulaText.value)
     const result = reader.ReadNodes()
     console.log(result)
-    modelFormula.value = new go.GraphLinksModel(ports, connections)
   }
 
   function updateGraph() {

@@ -15,13 +15,14 @@ export class Reader {
 
     private clearBuffer = () => this.buffer = '';
 
-    private addChild (node: Node) {
-        if(!this.currentNode)
+    private addChild (node: Node, to?: Node) {
+        const addTo = to ?? this.currentNode
+        if(!addTo)
             return;
-        if(this.currentNode.children)
-            this.currentNode.children.push(node)
+        if(addTo.children)
+            addTo.children.push(node)
         else
-            this.currentNode.children = [node]
+            addTo.children = [node]
     }
 
     public ReadNodes() {
@@ -65,6 +66,7 @@ export class Reader {
                             Value: OperandValue.OR,
                             children: [varNode]
                         };
+                        this.addChild(operandNode)
                         this.currentNode = operandNode;
                     } else {
                         throw new Error("Invalid format")
@@ -96,7 +98,7 @@ export class Reader {
                         this.currentNode = operandNode
                         if(this.previousNode) {
                             console.log("1", this.currentNode, this.previousNode)
-                            this.addChild(this.previousNode)
+                            this.currentNode.children = [this.previousNode]
                         }
                     } else if (this.currentNode.Type  == NodeType.OperandAND) {
                         this.addChild(varNode)
@@ -123,9 +125,7 @@ export class Reader {
             if(this.currentNode.Type == NodeType.OperandOR) {
                 if(this.previousNode) {
                     this.addChild(varNode)
-                    const current = this.currentNode;
                     this.currentNode = this.previousNode;
-                    this.addChild(current)
                 } else {
                     this.addChild(varNode)
                 }
