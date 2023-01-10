@@ -1,3 +1,4 @@
+import {Node, NodeType} from './algo'
 export function WriteGraph(data: string) {
     let buffer = "";
     let group = []
@@ -30,4 +31,24 @@ export function WriteGraph(data: string) {
         group.push({key: ++portKey, text: buffer, color: "lightblue", group: groupId})
     }
     return {group, connections}
+}
+
+export function CalculateReliability(node: Node, values: Map<string, number>): number {
+    if(node.Type == NodeType.Variable) {
+        const value = values.get(node.Value);
+        if(!value)
+            throw new Error("Enter values of all variables")
+        return value
+    }
+    else if(node.children && node.children.length == 2) {
+        const p1 = CalculateReliability(node.children[0], values)
+        const p2 = CalculateReliability(node.children[1], values)
+        if(node.Type == NodeType.OperandOR) {
+            return p1 + p2 - p1 * p2
+        }
+        if(node.Type == NodeType.OperandAND) {
+            return p1 * p2
+        }
+    }
+    throw new Error("Invalid input format")
 }
