@@ -36,7 +36,7 @@ export function WriteGraph(data: string) {
 export function CalculateReliability(node: Node, values: Map<string, number>): number {
     if(node.Type == NodeType.Variable) {
         const value = values.get(node.Value);
-        if(!value)
+        if(value == undefined)
             throw new Error("Enter values of all variables")
         return value
     }
